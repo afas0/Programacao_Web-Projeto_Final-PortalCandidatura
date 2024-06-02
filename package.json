@@ -1,0 +1,9 @@
+{
+  "name": "portal-candidaturas",
+  "version": "0.0.0",
+  "description": "Portal Candidaturas",
+  "main": "server.js",
+  "author": {
+    "name": ""
+  }
+}
