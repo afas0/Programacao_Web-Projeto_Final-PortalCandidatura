@@ -25,6 +25,7 @@ const InterfaceAluno = () => {
         contatoReferencias: ''
     });
     const [invalidFields, setInvalidFields] = useState({});
+    const [submitted, setSubmitted] = useState(false);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -48,23 +49,31 @@ const InterfaceAluno = () => {
 
         if (Object.keys(newInvalidFields).length === 0) {          
 
-            const newKey = `data_${Date.now()}`;
+            //valor unico
+            const newKey = `candidatura_${Date.now()}`;
+            // Adicionando o novo campo ao formulário antes de enviar
+            const formDataWithStatus = { ...formData, estado: "Nao avaliado" };
             // Guarda os dados atualizados no localStorage
-            localStorage.setItem(newKey, JSON.stringify(formData));
+            localStorage.setItem(newKey, JSON.stringify(formDataWithStatus));
+            //limpar os campos
             alert('Sucesso');
+            setSubmitted(true);
+            setShowForm(false);
         }
     };
 
     const toggleForm = () => {
-        setShowForm(prevShowForm => !prevShowForm);
+        if (!submitted) {
+            setShowForm(prevShowForm => !prevShowForm);
+        }
     };
 
     const getInputClass = (name) => invalidFields[name] ? 'invalid' : '';
 
     return (
         <div className="interface-aluno-container">
-            <button onClick={toggleForm}>
-                {showForm ? 'Esconder' : 'Criar Candidatura'}
+            <button onClick={toggleForm} className={submitted ? 'disabled' : ''}>
+                {submitted ? 'Candidatura Submetida' : (showForm ? 'Esconder' : 'Criar Candidatura')}
             </button>
             {showForm && (
                 <form className="form-container" onSubmit={handleSubmit}>
@@ -116,7 +125,7 @@ const InterfaceAluno = () => {
                     <div className="form-group">
                         <label htmlFor="telefone">N&uacute;mero de telefone:</label>
                         <input
-                            type="tel"
+                            type="number"
                             id="telefone"
                             name="telefone"
                             value={formData.telefone}
@@ -173,7 +182,10 @@ const InterfaceAluno = () => {
                     <div className="form-group">
                         <label htmlFor="mediaCurso">M&eacute;dia do curso de gradua&ccedil;&atilde;o:</label>
                         <input
-                            type="text"
+                            type="number"
+                            step="0.01"
+                            min="0"
+                            max="20"
                             id="mediaCurso"
                             name="mediaCurso"
                             value={formData.mediaCurso}

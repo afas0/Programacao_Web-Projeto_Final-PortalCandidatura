@@ -1,0 +1,36 @@
+.detalhes-candidatura-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #fff;
+    margin-top: 20px;
+}
+
+.detalhes-candidatura-container h2 {
+    margin-bottom: 20px;
+}
+
+.detalhes-candidatura-container p {
+    margin: 5px 0;
+}
+
+.detalhes-candidatura-container strong {
+    font-weight: bold;
+}
+
+.container {
+    text-align: center; /* Centraliza o conteúdo */
+    margin-top: 20px; /* Adiciona distância entre o botão e o container */
+}
+
+.button {
+    margin-top: 20px; /* Adiciona distância entre o botão e o container */
+}
+
+.button.disabled {
+    background-color: gray;
+    pointer-events: none;
+}

@@ -28,6 +28,10 @@
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
+    <Content Include="my-app\src\AvaliarCandidatura.css" />
+    <Content Include="my-app\src\AvaliarCandidatura.js" />
+    <Content Include="my-app\src\DetalhesCandidatura.css" />
+    <Content Include="my-app\src\DetalhesCandidatura.js" />
     <Content Include="my-app\src\InterfaceAluno.css" />
     <Content Include="my-app\src\InterfaceAluno.js" />
     <Content Include="my-app\src\InterfaceDocente.css" />

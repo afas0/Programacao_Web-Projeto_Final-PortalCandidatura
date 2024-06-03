@@ -1,0 +1,3 @@
+C:\Users\andre\source\repos\Portal Candidaturas\obj\Debug\Portal Candidaturas.njsproj.AssemblyReference.cache
+C:\Users\andre\source\repos\Portal Candidaturas\obj\Debug\Portal Candidaturas.njsproj.CoreCompileInputs.cache
+C:\Users\andre\source\repos\Portal Candidaturas\bin\Microsoft.NodejsTools.WebRole.dll
