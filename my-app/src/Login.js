@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './Login.css';
 
 const Login = () => {
+    const navigate = useNavigate();
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [usernameValid, setUsernameValid] = useState(true);
@@ -18,15 +20,12 @@ const Login = () => {
     };
 
     const validateForm = () => {
-        let isValid = true;
 
         if (username === '') {
             setUsernameValid(false);
-            isValid = false;
         }
         else if (password === '') {
             setPasswordValid(false);
-            isValid = false;
         }
         else {
             const utilizadorAluno = 'aluno';
@@ -35,19 +34,20 @@ const Login = () => {
             const passwordDocente = 'docente';
 
 
-            if (username !== utilizadorAluno && password !== passwordAluno) {
-                // If credentials don't match
+            if (username === utilizadorAluno && password === passwordAluno) {
+                // Se der match
+                alert('Sucesso');
+                navigate('/interface-aluno');
+            }
+            else if (username === utilizadorDocente && password === passwordDocente) {
+                alert('Sucesso');
+                navigate('/interface-docente');
+            }
+            else {
                 setUsernameValid(false);
                 setPasswordValid(false);
-                isValid = false;
-            }
-        }
-      
-
-        if (isValid) {
-            // Abre a caixa de alerta
-            alert('Sucesso');
-        }
+            }         
+        }      
     };
 
 

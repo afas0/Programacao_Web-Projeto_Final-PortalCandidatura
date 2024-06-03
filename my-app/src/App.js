@@ -1,16 +1,19 @@
-// App.js
 import React from 'react';
-import Login from './Login'; // Importe o componente de login que você criou
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Login from './Login';
+import InterfaceAluno from './InterfaceAluno';
+import InterfaceDocente from './InterfaceDocente';
 
-function App() {
+const App = () => {
     return (
-        <div className="App">
-            <header className="App-header">
-                {/* Remova o conteúdo anterior e renderize o componente de login */}
-                <Login />
-            </header>
-        </div>
+        <Router>
+            <Routes>
+                <Route path="/" element={<Login />} />
+                <Route path="/interface-aluno" element={<InterfaceAluno />} />
+                <Route path="/interface-docente" element={<InterfaceDocente />} />
+            </Routes>
+        </Router>
     );
-}
+};
 
 export default App;

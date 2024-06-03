@@ -28,11 +28,19 @@
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
+    <Content Include="my-app\src\InterfaceAluno.css" />
+    <Content Include="my-app\src\InterfaceAluno.js" />
+    <Content Include="my-app\src\InterfaceDocente.css" />
+    <Content Include="my-app\src\InterfaceDocente.js" />
     <Content Include="my-app\src\Login.css" />
     <Content Include="my-app\src\Login.js" />
     <Content Include="server.js" />
     <Content Include="package.json" />
     <Content Include="README.md" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="my-app\" />
+    <Folder Include="my-app\src\" />
   </ItemGroup>
   <Import Project="$(VSToolsPath)\Node.js Tools\Microsoft.NodejsToolsV2.targets" />
   <ProjectExtensions>
