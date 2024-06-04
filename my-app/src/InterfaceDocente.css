@@ -50,7 +50,6 @@ button {
 
     button:disabled {
         background-color: #87cefa;
-        cursor: not-allowed;
     }
 
 ul {
@@ -144,19 +143,22 @@ ul {
     margin-bottom: 20px;
 }
 
-    .settings-button-container button {
-        padding: 10px 20px;
-        background-color: #1e90ff;
-        color: #fff;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        transition: background-color 0.3s ease;
-    }
+.settings-button-container button {
+    padding: 10px 20px;
+    background-color: #1e90ff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
 
-        .settings-button-container button:hover {
-            background-color: #1c86ee;
-        }
+.settings-button-container button:hover {
+    background-color: #1c86ee;
+}
+.settings-button-container button:disabled {
+    background-color: #87cefa;
+}
 
 
 .range-container {
@@ -169,3 +171,4 @@ ul {
     width: 100%;
     padding: 0; /* Add zero padding */
 }
+

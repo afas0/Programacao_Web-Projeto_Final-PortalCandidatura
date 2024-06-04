@@ -10,6 +10,7 @@ const InterfaceDocente = () => {
     const [itemSelected, setItemSelected] = useState(false);
     const [selectedIndex, setSelectedIndex] = useState(null);
     const [showSettings, setShowSettings] = useState(false);
+    const [processFinalized, setProcessFinalized] = useState(false); //Para desativar butoes finalizar e configuracoes
     const [allCandidaturesEvaluated, setAllCandidaturesEvaluated] = useState(false);
     const navigate = useNavigate();
     const[pesoAcademico, setPesoAcademico] = useState(() => {
@@ -25,9 +26,8 @@ const InterfaceDocente = () => {
         return storedParametros ? JSON.parse(storedParametros).vagas : 1;
     });
     const checkAllCandidaturesEvaluated = () => {
-        const allEvaluated = filteredApplications.every(app => app.estado.toLowerCase() === 'avaliado');
+        const allEvaluated = applications.every(app => app.estado.toLowerCase() === 'avaliado');
         setAllCandidaturesEvaluated(allEvaluated);
-
     };
 
     useEffect(() => {
@@ -42,6 +42,13 @@ const InterfaceDocente = () => {
         setApplications(storedApplications);
         setFilteredApplications(storedApplications);
         checkAllCandidaturesEvaluated();
+        const estadoConcursoJSON = localStorage.getItem('estadoConcurso');
+        if (estadoConcursoJSON) {
+            const estadoConcurso = JSON.parse(estadoConcursoJSON);
+            if (estadoConcurso.estado === 'Fechado') {
+                setProcessFinalized(true);
+            }
+        }
     }, []);
 
     useEffect(() => {
@@ -64,36 +71,36 @@ const InterfaceDocente = () => {
                
                 
                 if (candidaturaKey) {
-                    const notaAcademica = parseFloat(avaliacaoData.notaAcademica);
-                    //alert(notaAcademica)
-                    const notaProfissional = parseFloat(avaliacaoData.notaProfissional);
-                    const notaFinal = (notaAcademica * (parametros.pesoAcademico / 100)) + (notaProfissional * (parametros.pesoProfissional / 100));
-
-                    const updatedCandidatura = { ...avaliacaoData, notaFinal };
-                    
-                    localStorage.setItem(avaliacaoKey, JSON.stringify(updatedCandidatura));
                     const candidaturaData = JSON.parse(localStorage.getItem(candidaturaKey));
-                    if (candidaturaData) {
-                        candidaturaData.notafinal = notaFinal;
-                        
-                        localStorage.setItem(candidaturaKey, JSON.stringify(candidaturaData));
-                    }
+                    if (candidaturaData && candidaturaData.estado.toLowerCase() === 'avaliado') {
+                        const notaAcademica = parseFloat(avaliacaoData.notaAcademica);
+                        //alert(notaAcademica)
+                        const notaProfissional = parseFloat(avaliacaoData.notaProfissional);
+                        const notaFinal = ((notaAcademica * (parametros.pesoAcademico / 100)) + (notaProfissional * (parametros.pesoProfissional / 100))).toFixed(2);
 
+                        const updatedCandidatura = { ...avaliacaoData, notaFinal };
+
+                        localStorage.setItem(avaliacaoKey, JSON.stringify(updatedCandidatura));
+                        candidaturaData.notafinal = notaFinal;
+
+                        localStorage.setItem(candidaturaKey, JSON.stringify(candidaturaData));
+
+                    }
                 }
             }
         }
         
-        //for (let i = 0; i < localStorage.length; i++) {
-        //    const candidaturaKey = localStorage.key(i);
-        //    if (candidaturaKey.startsWith("candidatura_")) {
-        //        const candidaturaData = JSON.parse(localStorage.getItem(candidaturaKey));
-        //        updatedApplications.push(candidaturaData);
-        //    }
-        //}
-        //updatedApplications.push(candidaturaData);
-        //setApplications(updatedApplications);
-        //setFilteredApplications(updatedApplications);
-        //checkAllCandidaturesEvaluated();
+        const updatedApplications = [];
+        for (let i = 0; i < localStorage.length; i++) {
+            const candidaturaKey = localStorage.key(i);
+            if (candidaturaKey.startsWith("candidatura_")) {
+                const candidaturaData = JSON.parse(localStorage.getItem(candidaturaKey));
+                updatedApplications.push(candidaturaData);
+            }
+        }
+        setApplications(updatedApplications);
+        setFilteredApplications(updatedApplications);
+        checkAllCandidaturesEvaluated();
     };
     
 
@@ -132,7 +139,27 @@ const InterfaceDocente = () => {
         const formDataWithStatus = {estado : "Fechado"};
         // Guarda os dados atualizados no localStorage
         localStorage.setItem(newKey, JSON.stringify(formDataWithStatus));
-        alert("sucesso");
+        const storedParametros = JSON.parse(localStorage.getItem('parametros'));
+        const candidaturas = [];
+        for (let i = 0; i < localStorage.length; i++) {
+            const key = localStorage.key(i);
+            if (key.startsWith("candidatura_")) {
+                const candidaturaData = JSON.parse(localStorage.getItem(key));
+                candidaturas.push({ key, ...candidaturaData });
+            }
+        }
+        candidaturas.sort((a, b) => b.notafinal - a.notafinal);
+        for (let i = 0; i < candidaturas.length; i++) {
+            if (i < storedParametros.vagas) {
+                candidaturas[i].resultado = "Aprovado";
+            } else {
+                candidaturas[i].resultado = "Reprovado";
+            }
+            // Atualiza a candidatura no localStorage
+            localStorage.setItem(candidaturas[i].key, JSON.stringify(candidaturas[i]));
+        }
+        alert("Processo finalizado com sucesso!");
+        setProcessFinalized(true); // estado como true
     };
 
     const filterApplications = (filter) => {
@@ -168,7 +195,7 @@ const InterfaceDocente = () => {
             </div>
             <div className="buttons-container">
                 <button onClick={() => sortApplications(sortOrder === 'asc' ? 'desc' : 'asc')}>
-                    Ordenar por Nota ({sortOrder === 'asc' ? 'Ascendente' : 'Descendente'})
+                    Ordenar por Média  ({sortOrder === 'asc' ? 'Ascendente' : 'Descendente'})
                 </button>
                 <button onClick={handleNewComponent} disabled={!itemSelected}>
                     Abrir Detalhes
@@ -184,13 +211,13 @@ const InterfaceDocente = () => {
                 </button>
                 <button
                     onClick={handleFinalizeProcess}
-                    disabled={!allCandidaturesEvaluated}
+                    disabled={!allCandidaturesEvaluated || processFinalized}
                 >
                     Finalizar Processo
                 </button>
             </div>
             <div className="settings-button-container">
-                <button onClick={handleSettingsToggle}>Configurações Avaliação</button>
+                <button onClick={handleSettingsToggle} disabled={processFinalized}>Configurações Avaliação</button>
             </div>
 
             {showSettings && (
@@ -268,6 +295,7 @@ const InterfaceDocente = () => {
                         <p><strong>Título de Graduação:</strong> {application.tituloGraduacao}</p>
                         <p><strong>Estado:</strong> {application.estado}</p>
                         <p><strong>Nota Candidatura:</strong> {application.notafinal}</p>
+                        <p><strong>Resultado:</strong> {application.resultado}</p>
                     </li>
                 ))}
             </ul>
