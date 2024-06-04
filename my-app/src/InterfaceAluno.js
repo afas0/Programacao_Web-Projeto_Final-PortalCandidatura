@@ -50,7 +50,6 @@ const InterfaceAluno = () => {
                 }
             }
         };
-
         checkCandidatura();
     }, [userId]);
 
