@@ -5,8 +5,17 @@ import AvaliarCandidatura from './AvaliarCandidatura';
 
 const DetalhesCandidatura = () => {
     const [showAvaliarForm, setShowAvaliarForm] = useState(false);
+
+    const candidaturaKeys = [];
+    for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (key.startsWith("candidatura_")) {
+            candidaturaKeys.push(key);
+        }
+    }
     const { index } = useParams();
-    const applicationKey = localStorage.key(index);
+    //alert(index)
+    const applicationKey = candidaturaKeys[index];
     const application = JSON.parse(localStorage.getItem(applicationKey));
 
 
@@ -14,6 +23,7 @@ const DetalhesCandidatura = () => {
         return <div>Aplicação não encontrada.</div>;
     }
     const handleAvaliarClick = () => {
+        //alert(application.estado)
         if (application.estado === "Nao avaliado") {
             setShowAvaliarForm(true);
         }      
