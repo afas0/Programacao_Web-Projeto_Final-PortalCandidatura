@@ -8,6 +8,10 @@ body {
     font-family: Arial, sans-serif;
 }
 
+.login-container {
+    position: relative;
+}
+
 .form-container {
     background-color: #fff;
     padding: 30px;
@@ -16,6 +20,12 @@ body {
     display: flex;
     flex-direction: column;
     gap: 20px;
+    position: relative;
+    z-index: 1;
+}
+
+.form-container.blur {
+    filter: blur(4px);
 }
 
 .form-group {
@@ -44,5 +54,39 @@ button {
     color: #fff;
     border: none;
     border-radius: 3px;
+    cursor: pointer;
+}
+
+button + button {
+    margin-left: 10px;
+}
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2;
+}
+
+.modal {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    position: relative;
+}
+
+.close-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: grey;
+    border: none;
+    font-size: 16px;
     cursor: pointer;
 }

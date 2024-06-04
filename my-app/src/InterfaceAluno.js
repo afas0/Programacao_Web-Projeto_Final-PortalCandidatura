@@ -1,7 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './InterfaceAluno.css';
+import { useLocation } from 'react-router-dom';
 
 const InterfaceAluno = () => {
+
+    const location = useLocation();
+    // para receber o id do utilizador
+    const { userId } = location.state || { userId: 'Unknown' };
+
+    //alert(userId);
     const [showForm, setShowForm] = useState(false);
     const [formData, setFormData] = useState({
         nomeCompleto: '',
@@ -26,6 +33,26 @@ const InterfaceAluno = () => {
     });
     const [invalidFields, setInvalidFields] = useState({});
     const [submitted, setSubmitted] = useState(false);
+    //utilizador_1717457282591
+
+    useEffect(() => {
+        // Verifique se há uma candidatura associada ao usuário com a chave fornecida
+        const checkCandidatura = () => {
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                if (key.startsWith("candidatura_")) {
+                    const candidaturaData = JSON.parse(localStorage.getItem(key));
+                    if (candidaturaData.utilizador_id === userId) {
+                        // Se houver uma candidatura associada, defina o botão como desabilitado
+                        setSubmitted(true);
+                        return; // Saia do loop assim que encontrar uma candidatura
+                    }
+                }
+            }
+        };
+
+        checkCandidatura();
+    }, [userId]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -52,7 +79,7 @@ const InterfaceAluno = () => {
             //valor unico
             const newKey = `candidatura_${Date.now()}`;
             // Adicionando o novo campo ao formulário antes de enviar
-            const formDataWithStatus = { ...formData, estado: "Nao avaliado" };
+            const formDataWithStatus = { ...formData, utilizador_id: userId,  estado: "Nao avaliado" };
             // Guarda os dados atualizados no localStorage
             localStorage.setItem(newKey, JSON.stringify(formDataWithStatus));
             //limpar os campos
