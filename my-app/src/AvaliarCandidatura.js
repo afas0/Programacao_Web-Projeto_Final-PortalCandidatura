@@ -5,8 +5,6 @@ import './AvaliarCandidatura.css';
 const AvaliarCandidatura = ({ applicationKey }) => {
     const [notaAcademica, setNotaAcademica] = useState('');
     const [notaProfissional, setNotaProfissional] = useState('');
-    const [pesoAcademico, setPesoAcademico] = useState('');
-    const [pesoProfissional, setPesoProfissional] = useState('');
     const [comentario, setComentario] = useState('');
     const navigate = useNavigate();
     
@@ -18,8 +16,6 @@ const AvaliarCandidatura = ({ applicationKey }) => {
         if (
             notaAcademica !== '' &&
             notaProfissional !== '' &&
-            pesoAcademico !== '' &&
-            pesoProfissional !== '' &&
             comentario !== ''
         ) {
             // Gera uma chave única para a avaliação
@@ -30,8 +26,6 @@ const AvaliarCandidatura = ({ applicationKey }) => {
                 id,
                 notaAcademica,
                 notaProfissional,
-                pesoAcademico,
-                pesoProfissional,
                 comentario
             };
             localStorage.setItem(newKey, JSON.stringify(formData));
@@ -39,16 +33,16 @@ const AvaliarCandidatura = ({ applicationKey }) => {
             const application = JSON.parse(localStorage.getItem(applicationKey)); 
             if (application) {
                 application.estado = "Avaliado";
+                //Para calcular a nota final
+                const parametros = JSON.parse(localStorage.getItem("parametros"));
+
+                let nota = (notaAcademica * (parametros.pesoAcademico / 100)) + (notaProfissional * (parametros.pesoProfissional / 100));
+                   
+                application.notafinal = nota;
                 localStorage.setItem(applicationKey, JSON.stringify(application));
             }
             alert('Avaliação enviada com sucesso!');
 
-            // Limpa o formulário após o envio
-            setNotaAcademica('');
-            setNotaProfissional('');
-            setPesoAcademico('');
-            setPesoProfissional('');
-            setComentario('');
             navigate('/interface-docente');
         } else {
             alert('Por favor, preencha todos os campos antes de enviar a avaliação.');
@@ -80,29 +74,7 @@ const AvaliarCandidatura = ({ applicationKey }) => {
                         value={notaProfissional}
                         onChange={(e) => setNotaProfissional(e.target.value)}
                     />
-                </div>
-                <div>
-                    <label>Peso Academico:</label>
-                    <input
-                        type="number"
-                        step="0.01"
-                        min="0"
-                        max="1"
-                        value={pesoAcademico}
-                        onChange={(e) => setPesoAcademico(e.target.value)}
-                    />
-                </div>
-                <div>
-                    <label>Peso Profissional:</label>
-                    <input
-                        type="number"
-                        step="0.01"
-                        min="0"
-                        max="1"
-                        value={pesoProfissional}
-                        onChange={(e) => setPesoProfissional(e.target.value)}
-                    />
-                </div>
+                </div>             
                 <div>
                     <label>Comentario:</label>
                     <textarea

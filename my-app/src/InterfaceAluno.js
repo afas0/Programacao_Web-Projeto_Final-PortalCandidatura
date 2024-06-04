@@ -36,6 +36,18 @@ const InterfaceAluno = () => {
     //utilizador_1717457282591
 
     useEffect(() => {
+        const estadoConcursoJSON = localStorage.getItem('estadoConcurso');
+        const estadoConcurso = JSON.parse(estadoConcursoJSON);
+
+        if (estadoConcurso.estado === 'Fechado') {
+            const candidaturaKey = userId;
+            const candidaturaData = JSON.parse(localStorage.getItem(candidaturaKey));
+            if (candidaturaData) {
+                // Exibir a nota da candidatura do usuário
+                alert(`A nota da sua candidatura é: ${candidaturaData.notafinal}`);
+            }
+        }
+
         // Verifique se há uma candidatura associada ao usuário com a chave fornecida
         const checkCandidatura = () => {
             for (let i = 0; i < localStorage.length; i++) {
@@ -78,7 +90,7 @@ const InterfaceAluno = () => {
             //valor unico
             const newKey = `candidatura_${Date.now()}`;
             // Adicionando o novo campo ao formulário antes de enviar
-            const formDataWithStatus = { ...formData, utilizador_id: userId,  estado: "Nao avaliado" };
+            const formDataWithStatus = { ...formData, utilizador_id: userId, estado: "Nao avaliado", notafinal: "Nenhuma" };
             // Guarda os dados atualizados no localStorage
             localStorage.setItem(newKey, JSON.stringify(formDataWithStatus));
             //limpar os campos
@@ -329,8 +341,3 @@ const InterfaceAluno = () => {
 };
 
 export default InterfaceAluno;
-
-
-
-
-
