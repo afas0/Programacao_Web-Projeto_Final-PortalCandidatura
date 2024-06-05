@@ -51,7 +51,6 @@ const AvaliarCandidatura = ({ applicationKey }) => {
 
     return (
         <div className="avaliar-candidatura-container">
-            <h3>Avaliar Candidatura</h3>
             <form onSubmit={handleSubmit}>
                 <div>
                     <label>Nota Academica:</label>

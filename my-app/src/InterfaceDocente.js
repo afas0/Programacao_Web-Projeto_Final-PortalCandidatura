@@ -13,7 +13,7 @@ const InterfaceDocente = () => {
     const [processFinalized, setProcessFinalized] = useState(false); //Para desativar butoes finalizar e configuracoes
     const [allCandidaturesEvaluated, setAllCandidaturesEvaluated] = useState(false);
     const navigate = useNavigate();
-    const[pesoAcademico, setPesoAcademico] = useState(() => {
+    const [pesoAcademico, setPesoAcademico] = useState(() => {
         const storedParametros = localStorage.getItem('parametros');
         return storedParametros ? JSON.parse(storedParametros).pesoAcademico : 50;
     });
@@ -31,6 +31,7 @@ const InterfaceDocente = () => {
     };
 
     useEffect(() => {
+        
         const storedApplications = [];
         for (let i = 0; i < localStorage.length; i++) {
             const key = localStorage.key(i);
@@ -39,9 +40,12 @@ const InterfaceDocente = () => {
                 storedApplications.push(applicationData);
             }
         }
+
         setApplications(storedApplications);
-        setFilteredApplications(storedApplications);
         checkAllCandidaturesEvaluated();
+        setFilteredApplications(storedApplications);
+         // Verify evaluations after setting applications
+        
         const estadoConcursoJSON = localStorage.getItem('estadoConcurso');
         if (estadoConcursoJSON) {
             const estadoConcurso = JSON.parse(estadoConcursoJSON);
@@ -49,7 +53,7 @@ const InterfaceDocente = () => {
                 setProcessFinalized(true);
             }
         }
-    }, []);
+    }, [applications]);
 
     useEffect(() => {
         const parametros = {
@@ -58,23 +62,20 @@ const InterfaceDocente = () => {
             vagas
         };
         localStorage.setItem('parametros', JSON.stringify(parametros));
-       recalculateFinalGrades(parametros);
+        recalculateFinalGrades(parametros);
     }, [pesoAcademico, pesoProfissional, vagas]);
-
+    
     const recalculateFinalGrades = (parametros) => {
-        //const updatedApplications = [];
         for (let i = 0; i < localStorage.length; i++) {
             const avaliacaoKey = localStorage.key(i);
             if (avaliacaoKey.startsWith("avaliacao_")) {
                 const avaliacaoData = JSON.parse(localStorage.getItem(avaliacaoKey));
                 const candidaturaKey = avaliacaoData.id;
-               
-                
+
                 if (candidaturaKey) {
                     const candidaturaData = JSON.parse(localStorage.getItem(candidaturaKey));
                     if (candidaturaData && candidaturaData.estado.toLowerCase() === 'avaliado') {
                         const notaAcademica = parseFloat(avaliacaoData.notaAcademica);
-                        //alert(notaAcademica)
                         const notaProfissional = parseFloat(avaliacaoData.notaProfissional);
                         const notaFinal = ((notaAcademica * (parametros.pesoAcademico / 100)) + (notaProfissional * (parametros.pesoProfissional / 100))).toFixed(2);
 
@@ -84,12 +85,11 @@ const InterfaceDocente = () => {
                         candidaturaData.notafinal = notaFinal;
 
                         localStorage.setItem(candidaturaKey, JSON.stringify(candidaturaData));
-
                     }
                 }
             }
         }
-        
+
         const updatedApplications = [];
         for (let i = 0; i < localStorage.length; i++) {
             const candidaturaKey = localStorage.key(i);
@@ -100,9 +100,8 @@ const InterfaceDocente = () => {
         }
         setApplications(updatedApplications);
         setFilteredApplications(updatedApplications);
-        checkAllCandidaturesEvaluated();
+        checkAllCandidaturesEvaluated(); // Verify evaluations after recalculating grades
     };
-    
 
     const handleApplicationSelect = (application, index) => {
         setSelectedApplication(application);
@@ -131,14 +130,12 @@ const InterfaceDocente = () => {
             navigate(`/detalhes-candidatura/${selectedIndex}`);
         }
     };
-    //para finalizar o processo
-    const handleFinalizeProcess = () => {
 
-        const newKey = "estadoConcurso"
-        // Adicionando o novo campo ao formulário antes de enviar
-        const formDataWithStatus = {estado : "Fechado"};
-        // Guarda os dados atualizados no localStorage
+    const handleFinalizeProcess = () => {
+        const newKey = "estadoConcurso";
+        const formDataWithStatus = { estado: "Fechado" };
         localStorage.setItem(newKey, JSON.stringify(formDataWithStatus));
+
         const storedParametros = JSON.parse(localStorage.getItem('parametros'));
         const candidaturas = [];
         for (let i = 0; i < localStorage.length; i++) {
@@ -148,6 +145,7 @@ const InterfaceDocente = () => {
                 candidaturas.push({ key, ...candidaturaData });
             }
         }
+
         candidaturas.sort((a, b) => b.notafinal - a.notafinal);
         for (let i = 0; i < candidaturas.length; i++) {
             if (i < storedParametros.vagas) {
@@ -155,11 +153,11 @@ const InterfaceDocente = () => {
             } else {
                 candidaturas[i].resultado = "Reprovado";
             }
-            // Atualiza a candidatura no localStorage
             localStorage.setItem(candidaturas[i].key, JSON.stringify(candidaturas[i]));
         }
+
         alert("Processo finalizado com sucesso!");
-        setProcessFinalized(true); // estado como true
+        setProcessFinalized(true);
     };
 
     const filterApplications = (filter) => {
@@ -172,7 +170,7 @@ const InterfaceDocente = () => {
             filtered = applications;
         }
         setFilteredApplications(filtered);
-
+        checkAllCandidaturesEvaluated(); // Verify evaluations after filtering
     };
 
     const handleSettingsToggle = () => {
@@ -304,4 +302,3 @@ const InterfaceDocente = () => {
 };
 
 export default InterfaceDocente;
-

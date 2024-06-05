@@ -33,7 +33,8 @@ const InterfaceAluno = () => {
     });
     const [invalidFields, setInvalidFields] = useState({});
     const [submitted, setSubmitted] = useState(false);
-    //utilizador_1717457282591
+    const [candidaturaStatus, setCandidaturaStatus] = useState('Pendente');
+    const [showResult, setShowResult] = useState(false);
 
     useEffect(() => {
         const estadoConcursoJSON = localStorage.getItem('estadoConcurso');
@@ -41,7 +42,6 @@ const InterfaceAluno = () => {
         if (estadoConcursoJSON) {
             const estadoConcurso = JSON.parse(estadoConcursoJSON);
             if (estadoConcurso.estado === 'Fechado') {
-                const candidaturaKey = userId;
 
 
                 for (let i = 0; i < localStorage.length; i++) {
@@ -50,8 +50,7 @@ const InterfaceAluno = () => {
                         const candidaturaData = JSON.parse(localStorage.getItem(key));
                         if (candidaturaData.utilizador_id === userId) {
                             
-                            alert(`A nota da sua candidatura é: ${candidaturaData.resultado}`);
-                            return; // Saia do loop assim que encontrar uma candidatura
+                            setCandidaturaStatus(candidaturaData.resultado);
                         }
                     }
                 }
@@ -115,14 +114,28 @@ const InterfaceAluno = () => {
             setShowForm(prevShowForm => !prevShowForm);
         }
     };
-
+    const handleViewCandidaturas = () => {
+        setShowResult(true);
+    };
     const getInputClass = (name) => invalidFields[name] ? 'invalid' : '';
 
     return (
         <div className="interface-aluno-container">
-            <button onClick={toggleForm} className={submitted ? 'disabled' : ''}>
-                {submitted ? 'Candidatura Submetida' : (showForm ? 'Esconder' : 'Criar Candidatura')}
-            </button>
+            <h1 className="page-title">Area do Aluno</h1>
+            <div className="panel">
+                <button onClick={toggleForm} className={submitted ? 'disabled' : ''}>
+                    {submitted ? 'Candidatura Submetida' : (showForm ? 'Esconder' : 'Criar Candidatura')}
+                </button>
+
+                {submitted && (
+                    <button onClick={handleViewCandidaturas}>Estado Candidatura</button>
+                )}
+                {showResult && (
+                    <div className="candidatura-status">
+                        <p>{candidaturaStatus}</p>
+                    </div>
+                )}
+            </div>
             {showForm && (
                 <form className="form-container" onSubmit={handleSubmit}>
                     <h2>Informa&ccedil;&otilde;es Pessoais</h2>

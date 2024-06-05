@@ -57,9 +57,8 @@ const DetalhesCandidatura = () => {
                 <button className={application.estado === "Avaliado" ? "button disabled" : "button"} onClick={handleAvaliarClick} disabled={application.estado === "Avaliado"}>Avaliar</button>
             </div>
             {showAvaliarForm && (
-                <div className="avaliar-candidatura-container">
-                    <AvaliarCandidatura applicationKey={applicationKey} />
-                </div>
+
+                <AvaliarCandidatura applicationKey={applicationKey} />
             )}
         </div>
     );

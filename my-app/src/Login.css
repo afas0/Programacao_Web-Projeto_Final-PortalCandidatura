@@ -4,62 +4,85 @@ body {
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    background-color: #f0f0f0;
-    font-family: Arial, sans-serif;
+    background: url(https://cdn.pixabay.com/photo/2020/04/16/11/13/background-5050213_1280.png);
+    background-size: cover;
+    background-position: center;
+    font-family: 'Satisfy', cursive;
 }
 
 .login-container {
-    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: transparent;
 }
-
-.form-container {
-    background-color: #fff;
-    padding: 30px;
-    border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+.login-form-container {
+    background-color: transparent;
+    padding: 50px;
+    border-radius: 20px;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
     display: flex;
     flex-direction: column;
-    gap: 20px;
-    position: relative;
+    gap: 30px;
     z-index: 1;
+    max-width: 500px;
+    width: 100%;
 }
 
-.form-container.blur {
-    filter: blur(4px);
-}
+    .login-form-container.blur {
+        filter: blur(4px);
+    }
 
-.form-group {
+.login-form-group {
     display: flex;
     flex-direction: column;
+    position: center;
 }
 
 label {
     font-weight: bold;
-    margin-bottom: 5px;
+    margin-bottom: 10px;
+    color: #333;
+    font-size: 20px;
 }
 
 input {
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 3px;
+    padding: 15px;
+    border: 2px solid #ddd;
+    border-radius: 10px;
+    transition: border-color 0.3s ease;
+    font-size: 16px;
 }
 
-input.invalid {
-    border-color: red;
-}
+    input:focus {
+        border-color: #FFA500;
+        outline: none;
+    }
+
+    input.invalid {
+        border-color: #F44336;
+    }
 
 button {
-    padding: 10px 20px;
-    background-color: #333;
+    padding: 15px 25px;
+    background-color: #d5e2c7;
     color: #fff;
     border: none;
-    border-radius: 3px;
+    border-radius: 10px;
     cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-weight: bold;
+    font-size: 16px;
+    width: 100%;
 }
 
-button + button {
-    margin-left: 10px;
-}
+    button:hover {
+        background-color: #FF8C00;
+    }
+
+    button + button {
+        margin-top: 15px;
+    }
 
 .modal-overlay {
     position: fixed;
@@ -67,7 +90,7 @@ button + button {
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgba(0, 0, 0, 0.7);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -76,17 +99,74 @@ button + button {
 
 .modal {
     background-color: #fff;
-    padding: 20px;
-    border-radius: 5px;
+    padding: 40px;
+    border-radius: 20px;
     position: relative;
+    max-width: 500px;
+    width: 100%;
 }
 
 .close-button {
     position: absolute;
     top: 10px;
     right: 10px;
-    background-color: grey;
+    background-color: transparent;
     border: none;
-    font-size: 16px;
+    font-size: 18px; 
+    color: #333;
     cursor: pointer;
+    transition: color 0.3s ease;
+    padding: 5px; 
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 30px; 
+    height: 30px; 
+}
+
+    .close-button:hover {
+        color: #F44336;
+        background-color: rgba(0, 0, 0, 0.1);
+    }
+
+.modal h2 {
+    font-size: 28px;
+    color: #333;
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); 
+    z-index: 1000; 
+}
+
+.popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    z-index: 1001; 
+}
+close-button-popup {
+    position: absolute;
+    top: 5px; /* Ajuste a posição conforme necessário */
+    right: 5px; /* Ajuste a posição conforme necessário */
+    padding: 50px 100px; /* Ajuste o padding conforme necessário */
+    font-size: 10px; /* Reduza o tamanho da fonte conforme desejado */
+    color: #fff;
+    background-color: rgba(0, 0, 0, 0.7);
+    border: 1px solid #ccc;
+    cursor: pointer;
+    z-index: 1002;
 }
