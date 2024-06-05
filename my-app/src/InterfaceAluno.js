@@ -35,6 +35,7 @@ const InterfaceAluno = () => {
     const [submitted, setSubmitted] = useState(false);
     const [candidaturaStatus, setCandidaturaStatus] = useState('Pendente');
     const [showResult, setShowResult] = useState(false);
+    const [showSuccessPopup, setShowSuccessPopup] = useState(false);
 
     useEffect(() => {
         const estadoConcursoJSON = localStorage.getItem('estadoConcurso');
@@ -103,7 +104,7 @@ const InterfaceAluno = () => {
             // Guarda os dados atualizados no localStorage
             localStorage.setItem(newKey, JSON.stringify(formDataWithStatus));
             //limpar os campos
-            alert('Sucesso');
+            setShowSuccessPopup(true);
             setSubmitted(true);
             setShowForm(false);
         }
@@ -114,6 +115,10 @@ const InterfaceAluno = () => {
             setShowForm(prevShowForm => !prevShowForm);
         }
     };
+    const handleClosePopup = () => {
+        setShowSuccessPopup(false);
+    };
+
     const handleViewCandidaturas = () => {
         setShowResult(true);
     };
@@ -121,7 +126,7 @@ const InterfaceAluno = () => {
 
     return (
         <div className="interface-aluno-container">
-            <h1 className="page-title">Area do Aluno</h1>
+            <h1 className="page-title">&Aacute;rea do Aluno</h1>
             <div className="panel">
                 <button onClick={toggleForm} className={submitted ? 'disabled' : ''}>
                     {submitted ? 'Candidatura Submetida' : (showForm ? 'Esconder' : 'Criar Candidatura')}
@@ -173,7 +178,7 @@ const InterfaceAluno = () => {
                         />
                     </div>
                     <div className="form-group">
-                        <label htmlFor="endereco">Endere&ccedil;o residencial:</label>
+                        <label htmlFor="endereco">Morada:</label>
                         <input
                             type="text"
                             id="endereco"
@@ -208,7 +213,7 @@ const InterfaceAluno = () => {
 
                     <h2>Forma&ccedil;&atilde;o Acad&eacute;mica</h2>
                     <div className="form-group">
-                        <label htmlFor="tituloGraduacao">T&iacute;tulo de gradua&ccedil;&atilde;o:</label>
+                        <label htmlFor="tituloGraduacao">Qualifica&ccedil;&otilde;es adquiridas:</label>
                         <input
                             type="text"
                             id="tituloGraduacao"
@@ -241,7 +246,7 @@ const InterfaceAluno = () => {
                         />
                     </div>
                     <div className="form-group">
-                        <label htmlFor="mediaCurso">M&eacute;dia do curso de gradua&ccedil;&atilde;o:</label>
+                        <label htmlFor="mediaCurso">M&eacute;dia de curso:</label>
                         <input
                             type="number"
                             step="0.01"
@@ -357,7 +362,17 @@ const InterfaceAluno = () => {
                     </div>
 
                     <button type="submit">Enviar</button>
+
                 </form>
+
+            )}
+            {showSuccessPopup && (
+                <div className="popup-overlay">
+                    <div className="popup">
+                        <button className="close-button-popup" onClick={handleClosePopup}>x</button>
+                        <p>Candidatura enviada com sucesso!</p>
+                    </div>
+                </div>
             )}
         </div>
     );

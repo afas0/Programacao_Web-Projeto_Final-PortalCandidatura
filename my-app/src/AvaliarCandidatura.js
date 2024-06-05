@@ -7,9 +7,11 @@ const AvaliarCandidatura = ({ applicationKey }) => {
     const [notaProfissional, setNotaProfissional] = useState('');
     const [comentario, setComentario] = useState('');
     const navigate = useNavigate();
+    const [showFailedPopup, setShowFailedPopup] = useState(false);
     
-    
-
+    const handleClosePopup = () => {
+        setShowFailedPopup(false);
+    };
     const handleSubmit = (e) => {
         e.preventDefault();
         // Verifica se todos os campos estão preenchidos
@@ -41,11 +43,10 @@ const AvaliarCandidatura = ({ applicationKey }) => {
                 application.notafinal = nota;
                 localStorage.setItem(applicationKey, JSON.stringify(application));
             }
-            alert('Avaliação enviada com sucesso!');
-
+            
             navigate('/interface-docente');
         } else {
-            alert('Por favor, preencha todos os campos antes de enviar a avaliação.');
+            setShowFailedPopup(true);
         }
     };
 
@@ -82,7 +83,16 @@ const AvaliarCandidatura = ({ applicationKey }) => {
                     ></textarea>
                 </div>
                 <button type="submit">Enviar Avaliacao</button>
+
             </form>
+            {showFailedPopup && (
+                <div className="popup-overlay">
+                    <div className="popup">
+                        <button className="close-button-popup" onClick={handleClosePopup}>x</button>
+                        <p>Campos por preencher!</p>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };

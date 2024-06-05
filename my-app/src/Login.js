@@ -76,25 +76,39 @@ const Login = () => {
     };
 
     const handleRegisterSubmit = () => {
-        if (storedUsername === '') {
-            setNewUsernameValid(false);
+        const estadoConcursoJSON = localStorage.getItem('estadoConcurso');
+
+        if (estadoConcursoJSON) {
+
+            const estadoConcurso = JSON.parse(estadoConcursoJSON);
+            if (estadoConcurso.estado === 'Fechado') {
+
+                alert("Concurso encerrado, sem sucesso")
+            }
         }
-        if (storedPassword === '') {
-            setNewPasswordValid(false);
+        else {
+
+            if (storedUsername === '') {
+                setNewUsernameValid(false);
+            }
+            if (storedPassword === '') {
+                setNewPasswordValid(false);
+            }
+            if (storedUsername !== '' && storedPassword !== '') {
+                const newKey = `utilizador_${Date.now()}`;
+                //const id = applicationKey;
+                // Salva os dados da avaliação no localStorage
+                const formData = {
+                    //id,
+                    storedUsername,
+                    storedPassword
+                };
+                localStorage.setItem(newKey, JSON.stringify(formData));
+                setShowSuccessPopup(true);
+                setShowRegisterModal(false);
+            }
         }
-        if (storedUsername !== '' && storedPassword !== '') {
-            const newKey = `utilizador_${Date.now()}`;
-            //const id = applicationKey;
-            // Salva os dados da avaliação no localStorage
-            const formData = {
-                //id,
-                storedUsername,
-                storedPassword
-            };
-            localStorage.setItem(newKey, JSON.stringify(formData));
-            setShowSuccessPopup(true);
-            setShowRegisterModal(false);
-        }
+        
     };
 
     return (

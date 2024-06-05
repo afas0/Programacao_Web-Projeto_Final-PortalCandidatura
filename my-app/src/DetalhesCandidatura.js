@@ -20,7 +20,7 @@ const DetalhesCandidatura = () => {
 
 
     if (!application) {
-        return <div>Aplicação não encontrada.</div>;
+        return <div>Aplicacao nao encontrada.</div>;
     }
     const handleAvaliarClick = () => {
         //alert(application.estado)
@@ -36,10 +36,10 @@ const DetalhesCandidatura = () => {
                 <p><strong>Nome:</strong> {application.nomeCompleto}</p>
                 <p><strong>Data de Nascimento:</strong> {application.dataNascimento}</p>
                 <p><strong>Nacionalidade:</strong> {application.nacionalidade}</p>
-                <p><strong>Endereco:</strong> {application.endereco}</p>
+                <p><strong>Morada:</strong> {application.endereco}</p>
                 <p><strong>Telefone:</strong> {application.telefone}</p>
                 <p><strong>Email:</strong> {application.email}</p>
-                <p><strong>Titulo de Graduacao:</strong> {application.tituloGraduacao}</p>
+                <p><strong>Qualificacoes:</strong> {application.tituloGraduacao}</p>
                 <p><strong>Instituicao:</strong> {application.instituicao}</p>
                 <p><strong>Area de Estudo:</strong> {application.areaEstudo}</p>
                 <p><strong>Media do Curso:</strong> {application.mediaCurso}</p>

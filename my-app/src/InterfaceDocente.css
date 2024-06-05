@@ -16,6 +16,7 @@ body {
     color: #fff;
 }
 
+
 .header {
     background: rgba(0, 0, 139, 0.7);
     padding: 20px;
@@ -62,30 +63,30 @@ ul {
 .application-item {
     background-color: rgb(207, 208, 185, 0.8);
     padding: 15px;
-    border: 1px solid #ccc;
+    border: 2px solid #ccc;
     border-radius: 5px;
     margin-bottom: 10px;
     transition: transform 0.2s;
     cursor: pointer;
 }
 
-    .application-item p {
-        margin: 5px 0;
-        color: #333;
-    }
+.application-item p {
+    margin: 5px 0;
+    color: #333;
+}
 
-    .application-item strong {
-        font-weight: bold;
-    }
+.application-item strong {
+    font-weight: bold;
+}
 
-    .application-item.selected {
-        border-color: #1e90ff;
-        transform: scale(1.02);
-    }
+.application-item.selected {
+    border-color: #1e90ff;
+    transform: scale(1.02);
+}
 
-    .application-item:hover {
-        transform: scale(1.02);
-    }
+.application-item:hover {
+    transform: scale(1.02);
+}
 
 .settings-modal {
     position: fixed;
@@ -172,3 +173,8 @@ ul {
     padding: 0; /* Add zero padding */
 }
 
+
+.popup p {
+    color: #000; 
+    font-weight: bold;
+}

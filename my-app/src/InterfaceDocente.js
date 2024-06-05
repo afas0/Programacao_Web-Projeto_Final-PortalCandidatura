@@ -11,8 +11,9 @@ const InterfaceDocente = () => {
     const [selectedIndex, setSelectedIndex] = useState(null);
     const [showSettings, setShowSettings] = useState(false);
     const [processFinalized, setProcessFinalized] = useState(false); //Para desativar butoes finalizar e configuracoes
-    const [allCandidaturesEvaluated, setAllCandidaturesEvaluated] = useState(false);
     const navigate = useNavigate();
+    const [showConfirmPopup, setShowConfirmPopup] = useState(false);
+    const [allCandidaturesEvaluated, setAllCandidaturesEvaluated] = useState(false);
     const [pesoAcademico, setPesoAcademico] = useState(() => {
         const storedParametros = localStorage.getItem('parametros');
         return storedParametros ? JSON.parse(storedParametros).pesoAcademico : 50;
@@ -25,11 +26,6 @@ const InterfaceDocente = () => {
         const storedParametros = localStorage.getItem('parametros');
         return storedParametros ? JSON.parse(storedParametros).vagas : 1;
     });
-    const checkAllCandidaturesEvaluated = () => {
-        const allEvaluated = applications.every(app => app.estado.toLowerCase() === 'avaliado');
-        setAllCandidaturesEvaluated(allEvaluated);
-    };
-
     useEffect(() => {
         
         const storedApplications = [];
@@ -42,10 +38,28 @@ const InterfaceDocente = () => {
         }
 
         setApplications(storedApplications);
-        checkAllCandidaturesEvaluated();
         setFilteredApplications(storedApplications);
-         // Verify evaluations after setting applications
-        
+
+        let teste = true;
+        for (let i = 0; i < localStorage.length; i++) {
+            const key = localStorage.key(i);
+            if (key.startsWith("candidatura_")) {
+                const applicationData = JSON.parse(localStorage.getItem(key));
+                if (applicationData.estado !== "Avaliado") {
+                    teste = false;
+                }
+            }
+        }
+        const allEvaluated = teste;
+        //alert(allEvaluated);
+        setAllCandidaturesEvaluated(allEvaluated);
+        //if (allEvaluated) {
+        //    setProcessFinalized(true);
+        //} else {
+        //    setProcessFinalized(false);
+        //}
+
+
         const estadoConcursoJSON = localStorage.getItem('estadoConcurso');
         if (estadoConcursoJSON) {
             const estadoConcurso = JSON.parse(estadoConcursoJSON);
@@ -53,7 +67,7 @@ const InterfaceDocente = () => {
                 setProcessFinalized(true);
             }
         }
-    }, [applications]);
+    }, []);
 
     useEffect(() => {
         const parametros = {
@@ -100,7 +114,6 @@ const InterfaceDocente = () => {
         }
         setApplications(updatedApplications);
         setFilteredApplications(updatedApplications);
-        checkAllCandidaturesEvaluated(); // Verify evaluations after recalculating grades
     };
 
     const handleApplicationSelect = (application, index) => {
@@ -131,7 +144,10 @@ const InterfaceDocente = () => {
         }
     };
 
-    const handleFinalizeProcess = () => {
+    const confirmFinalizeProcess = () => {
+       
+        setShowConfirmPopup(false);
+
         const newKey = "estadoConcurso";
         const formDataWithStatus = { estado: "Fechado" };
         localStorage.setItem(newKey, JSON.stringify(formDataWithStatus));
@@ -156,9 +172,21 @@ const InterfaceDocente = () => {
             localStorage.setItem(candidaturas[i].key, JSON.stringify(candidaturas[i]));
         }
 
-        alert("Processo finalizado com sucesso!");
+
         setProcessFinalized(true);
+
+
+        
     };
+
+    const handleFinalizeProcess = () => {
+        setShowConfirmPopup(true);
+    };
+
+    const handleClosePopup = () => {
+        setShowConfirmPopup(false);
+    };
+
 
     const filterApplications = (filter) => {
         let filtered = applications;
@@ -170,7 +198,6 @@ const InterfaceDocente = () => {
             filtered = applications;
         }
         setFilteredApplications(filtered);
-        checkAllCandidaturesEvaluated(); // Verify evaluations after filtering
     };
 
     const handleSettingsToggle = () => {
@@ -209,7 +236,7 @@ const InterfaceDocente = () => {
                 </button>
                 <button
                     onClick={handleFinalizeProcess}
-                    disabled={!allCandidaturesEvaluated || processFinalized}
+                    disabled={!allCandidaturesEvaluated || processFinalized}  //!allCandidaturesEvaluated || processFinalized
                 >
                     Finalizar Processo
                 </button>
@@ -278,7 +305,19 @@ const InterfaceDocente = () => {
                     </div>
                 </div>
             )}
-
+            {showConfirmPopup && (
+                <div className="popup-overlay">
+                    <div className="popup-overlay">
+                        <div className="popup">
+                            <p>Pretende finalizar o concurso?</p>
+                            <div className="popup-buttons">
+                                <button onClick={confirmFinalizeProcess}>Sim</button>
+                                <button onClick={handleClosePopup}>Não</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
             <ul>
                 {filteredApplications.map((application, index) => (
                     <li
@@ -290,7 +329,7 @@ const InterfaceDocente = () => {
                         <p><strong>Nome:</strong> {application.nomeCompleto}</p>
                         <p><strong>Media de curso:</strong> {application.mediaCurso}</p>
                         <p><strong>Email:</strong> {application.email}</p>
-                        <p><strong>Título de Graduação:</strong> {application.tituloGraduacao}</p>
+                        <p><strong>Qualificações adquiridas:</strong> {application.tituloGraduacao}</p>
                         <p><strong>Estado:</strong> {application.estado}</p>
                         <p><strong>Nota Candidatura:</strong> {application.notafinal}</p>
                         <p><strong>Resultado:</strong> {application.resultado}</p>

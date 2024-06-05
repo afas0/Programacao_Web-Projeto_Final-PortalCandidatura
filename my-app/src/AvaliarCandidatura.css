@@ -26,15 +26,15 @@
     box-sizing: border-box;
 }
 
-    .avaliar-candidatura-container button {
-        margin-top: 10px;
-        padding: 10px 20px;
-        background-color: #333;
-        color: #fff;
-        border: none;
-        border-radius: 3px;
-        cursor: pointer;
-    }
+.avaliar-candidatura-container button {
+    margin-top: 10px;
+    padding: 10px 20px;
+    background-color: #333;
+    color: #fff;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+}
 
 .avaliar-candidatura-container button:hover {
     background-color: #555;
